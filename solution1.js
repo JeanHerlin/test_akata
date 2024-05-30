@@ -2,28 +2,34 @@
 function isValidHtml(html){
 
     //turn html tag into table
-    let v = replaceAll(html,[">","<","/"]," ")
+    let v = replaceAll(html,["<"]," ")
     let t = v.split(' ')
 
     //table of html tag
-    let t2 = t.filter((v)=>v!="")
-    let isValid
+     t = t.filter((v)=>v!="")
 
-    if(t2.length%2===1) return false
+    if(t.length%2===1) return false
 
     // verifying if valid
-    for(let i=0;i<t2.length;i++){
-        
-        for(let j=i+1;j<t2.length;j++){
-            if(t2[j]===t2[i] && j%2!==i%2) isValid = true
-            if(t2[j]===t2[i] && j%2===i%2) return false
-        }
-        
-    }
+    for(let i=0;i<(t.length/2);i++){
 
-    return isValid
+        /****
+         * openTag === tag>
+         * closingTag === tab>
+         * t[t.length-1-i] === /tag>
+         */
+        const openTag = t[i]
+        const closingTag = t[t.length-1-i].replace('/',"")
+        if(openTag===t[t.length-1-i] || openTag!==closingTag) return false
+    }
+    return true
 }
 
+/***
+ * str: string,
+ * value: table of character
+ * newVal: value to replace the chars in table
+ */
 
 let replaceAll = (str,value,newVal,)=>{
     let newStr = ""
@@ -44,5 +50,5 @@ let replaceAll = (str,value,newVal,)=>{
     return newStr
 }
 
-const res = isValidHtml('<span><p></span>')
+const res = isValidHtml('<span><p><h1><small></small></h1></p></span>')
 console.log(res)
